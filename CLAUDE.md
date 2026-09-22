@@ -8,8 +8,9 @@
 - リモート: `https://github.com/iosxi/sleep-guard.git`（`iosxi/sleep-guard`）
 - ブランチ: **`master`**（`main` ではない）
 - 最新バージョンの確認: `git tag --sort=-v:refname | head -1`
-- リリースの添付物: **`SleepGuard-vN.exe`**（`SleepGuard.exe` をその名前でコピーして添付）
-  Content-Type は `application/vnd.microsoft.portable-executable`
+- リリースの添付物: **`SleepGuard-vN.exe`**
+  `SleepGuard.exe` をその名前でコピーしてから `gh release create` に渡す
+  （アップロード名はファイル名そのものになるため）。コピーはコミットに含めない。
 
 ### exe を変更したとき
 
@@ -21,7 +22,7 @@ exe はリポジトリに追跡させているので、コミットに含める�
 
 このプロジェクトには Android の `versionCode` にあたるものが無い。
 exe のメタデータに `FileVersion` があるが、タグの `vN` とは別系統で、
-今のところ連動させていない（v1 時点で `1.1.0`）。
+今のところ連動させていない（v4 時点で `1.1.0`）。
 
 ## 動作確認について
 
