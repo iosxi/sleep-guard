@@ -2,9 +2,9 @@
 #define IDD_DURATION     100
 
 #define IDC_RB_FIRST     200   // ここから並びの順にラジオボタン
-#define IDC_RB_5SEC      200
-#define IDC_RB_1MIN      201
-#define IDC_RB_30MIN     202
+#define IDC_RB_15MIN     200
+#define IDC_RB_30MIN     201
+#define IDC_RB_45MIN     202
 #define IDC_RB_1H        203
 #define IDC_RB_2H        204
 #define IDC_RB_4H        205

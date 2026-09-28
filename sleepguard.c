@@ -155,7 +155,7 @@ static LRESULT CALLBACK wnd_proc(HWND w, UINT msg, WPARAM wp, LPARAM lp) {
 // ---- 時間選択ダイアログ ----
 
 static const LONGLONG k_presetSec[] = {
-    5, 60, 30 * 60, 60 * 60, 2 * 3600, 4 * 3600, MAX_SECONDS,
+    15 * 60, 30 * 60, 45 * 60, 60 * 60, 2 * 3600, 4 * 3600, MAX_SECONDS,
 };
 
 static void sync_custom(HWND d) {
@@ -170,7 +170,7 @@ static INT_PTR CALLBACK dlg_proc(HWND d, UINT msg, WPARAM wp, LPARAM lp) {
     case WM_INITDIALOG:
         SendMessageW(d, WM_SETICON, ICON_BIG, (LPARAM)g_iconLarge);
         SendMessageW(d, WM_SETICON, ICON_SMALL, (LPARAM)g_iconSmall);
-        CheckRadioButton(d, IDC_RB_FIRST, IDC_RB_LAST, IDC_RB_1H);  // 既定: 1時間
+        CheckRadioButton(d, IDC_RB_FIRST, IDC_RB_LAST, IDC_RB_30MIN);  // 既定: 30分
         CheckDlgButton(d, IDC_DISPLAY, BST_CHECKED);
         SendDlgItemMessageW(d, IDC_CUSTOM_EDIT, EM_SETLIMITTEXT, 3, 0);
         sync_custom(d);
