@@ -18,27 +18,35 @@
 
 ### exe を変更したとき
 
-`SleepGuard.ps1` を直したら、**exe を作り直してからコミットする**。
-exe はリポジトリに追跡させているので、コミットに含める。
-ビルドコマンドとメタデータは README.md の「ビルド」を見る。
+ソース（`sleepguard.c` / `sleepguard.rc` など）を直したら、**`build.cmd` で exe を
+作り直してからコミットする**。exe はリポジトリに追跡させているので、コミットに含める。
+v6 で PowerShell（ps2exe）版から C 版に置き換えた。`SleepGuard.ps1` はもう無い。
 
 ### バージョンの持ち方
 
-このプロジェクトには Android の `versionCode` にあたるものが無い。
-exe のメタデータに `FileVersion` があるが、タグの `vN` とは別系統で、
-今のところ連動させていない（v5 時点で `1.1.0`）。
+タグの `vN` とは別に、exe の `FileVersion`（`sleepguard.rc` の VERSIONINFO）がある。
+連動はさせていない（v6 時点で `2.0.0`）。機能が変わったら上げる。
 
 ## 動作確認について
 
-GUI アプリなので、起動すると**利用者の画面にダイアログが出て前面を奪う**。
+GUI アプリなので、ダイアログを出すと**利用者の画面の前面を奪う**。
 確認するときは画面を撮ったりキー操作を送ったりせず、プロセスを直接扱う。
 
-```powershell
-$p = Start-Process .\SleepGuard.exe -PassThru
-Start-Sleep -Seconds 3
-$p.MainWindowTitle   # 「スリープ防止」が出れば起動成功
-$p.Kill()            # 「開始」を押す前なら実行状態は何も変わっていない
-```
+- **ダイアログを経由しない確認**は、コマンドライン `-s <秒>` / `-m <分>` / `-nodisplay`
+  で直接開始できる。実行状態は管理者権限なしで
+  `CallNtPowerInformation(SystemExecutionState)` から読める
+  （`powercfg /requests` は管理者権限が要るので使えない）。
+- **ダイアログの確認**は、起動して `MainWindowTitle` が「スリープ防止」になるのを見て、
+  子ウィンドウの文字・チェック状態を `EnumChildWindows` で読み、「開始」を押す前に
+  `Kill()` する。押す前なら `SetThreadExecutionState` は呼ばれていない。
 
-「開始」を押す前に落とす限り `SetThreadExecutionState` は呼ばれないので、
-電源まわりの状態を汚さずに済む。
+### 実際にスリープさせて確かめるとき
+
+- `SYSTEM_POWER_INFORMATION.TimeRemaining`（アイドルスリープまでの残り秒）は
+  この PC では常に `0xFFFFFFFF` で使えない。実際に寝かせて壁時計の飛びで見る。
+- 寝かせたら `SetWaitableTimer(..., fResume=TRUE)` のウェイクタイマーで自動復帰させる
+  （AC のスリープ解除タイマーは有効）。
+- スリープ設定は `powercfg /change standby-timeout-ac N` で管理者なしで変えられる。
+  **元の値（AC: 画面オフ 3 分 / スリープ 10 分）に必ず戻す。**
+- スリープ設定を画面オフより短くすると、この PC では画面が消えるまで寝ないので、
+  測るときは「画面オフ < スリープ」の順にする。

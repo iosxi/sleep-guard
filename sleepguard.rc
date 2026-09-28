@@ -1,0 +1,55 @@
+#pragma code_page(65001)
+#include <windows.h>
+#include "resource.h"
+
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+// ツールチェーン既定の manifest と同じ言語にして置き換えさせる
+CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "sleepguard.manifest"
+
+LANGUAGE LANG_JAPANESE, SUBLANG_DEFAULT
+IDI_APP ICON "sleepguard.ico"
+
+IDD_DURATION DIALOGEX 0, 0, 180, 200
+STYLE DS_SHELLFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "スリープ防止"
+FONT 9, "Yu Gothic UI", 400, 0, 0x80
+BEGIN
+    LTEXT           "何時間スリープを防止しますか？", IDC_PROMPT, 12, 10, 160, 10
+    AUTORADIOBUTTON "5秒（テスト用）",  IDC_RB_5SEC,   20, 26, 140, 11, WS_GROUP | WS_TABSTOP
+    AUTORADIOBUTTON "1分（テスト用）",  IDC_RB_1MIN,   20, 40, 140, 11
+    AUTORADIOBUTTON "30分",            IDC_RB_30MIN,  20, 54, 140, 11
+    AUTORADIOBUTTON "1時間",           IDC_RB_1H,     20, 68, 140, 11
+    AUTORADIOBUTTON "2時間",           IDC_RB_2H,     20, 82, 140, 11
+    AUTORADIOBUTTON "4時間",           IDC_RB_4H,     20, 96, 140, 11
+    AUTORADIOBUTTON "9時間（最長）",    IDC_RB_9H,     20, 110, 140, 11
+    AUTORADIOBUTTON "カスタム（分単位で指定）", IDC_RB_CUSTOM, 20, 124, 140, 11
+    EDITTEXT        IDC_CUSTOM_EDIT, 34, 138, 40, 13, ES_NUMBER | ES_AUTOHSCROLL | WS_GROUP | WS_TABSTOP
+    LTEXT           "分", IDC_CUSTOM_LABEL, 78, 140, 20, 10
+    AUTOCHECKBOX    "ディスプレイも消さない", IDC_DISPLAY, 20, 160, 140, 11, WS_GROUP | WS_TABSTOP
+    DEFPUSHBUTTON   "開始", IDOK, 65, 178, 50, 15, WS_GROUP | WS_TABSTOP
+END
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 2,0,0,0
+ PRODUCTVERSION 2,0,0,0
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_APP
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041104b0"
+        BEGIN
+            VALUE "CompanyName", "nekoryu"
+            VALUE "FileDescription", "スリープ防止"
+            VALUE "FileVersion", "2.0.0"
+            VALUE "ProductName", "SleepGuard"
+            VALUE "ProductVersion", "2.0.0"
+            VALUE "Comments", "指定時間だけWindowsのスリープを防止します"
+            VALUE "OriginalFilename", "SleepGuard.exe"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0411, 1200
+    END
+END
